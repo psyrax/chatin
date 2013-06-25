@@ -1,6 +1,7 @@
-var app = require('http').createServer(handler)
-  , io = require('socket.io').listen(app)
-  , fs = require('fs')
+var app = require('http').createServer(handler),
+io = require('socket.io').listen(app),
+fs = require('fs'),
+Moniker = require('moniker');
 
 app.listen(1337);
 
@@ -20,11 +21,15 @@ function handler (req, res) {
 io.sockets.on('connection', function (socket) {
   socket.on('room', function(room) {
         socket.join(room);
+        socket.emit('nickname', { nickname: Moniker.choose() });
   });
   socket.on('transmit', function(data){
     var selroom = data.room;
     var usermensaje = data.userMensaje;
-    socket.in(selroom).broadcast.emit('message' ,{mensaje: usermensaje});
+    var userNick = data.userNick;
+    socket.in(selroom).broadcast.emit('message' ,
+      { mensaje: usermensaje,
+        from: userNick });
     socket.in(selroom).emit('userMessage' ,{mensaje: usermensaje});
   })
 });

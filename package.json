@@ -1,0 +1,15 @@
+{
+  "name": "nodechat",
+  "subdomain": "psyrax-nodechat",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "version": "0.0.2",
+  "dependencies": {
+  	"socket.io" : "*",
+  	"moniker" : "*"
+  	},
+  "engines": {
+    "node": "0.8.x"
+  }
+}

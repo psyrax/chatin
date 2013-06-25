@@ -1,0 +1,59 @@
+/* Artfully masterminded by ZURB  */
+
+/* -------------------------------------------------- 
+   Table of Contents
+-----------------------------------------------------
+:: Shared Styles
+:: Page Name 1
+:: Page Name 2
+*/
+
+
+/* -----------------------------------------
+   Shared Styles
+----------------------------------------- */
+
+#chat
+{
+	min-height: 300px;
+	overflow: auto;
+}
+#chat p
+{
+	margin-bottom: 0 !important;
+	line-height: 1.3;
+}
+#nickEcho
+{
+	text-align: right;
+}
+/* -----------------------------------------
+   Page Name 1
+----------------------------------------- */
+
+
+#chat::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #F5F5F5;
+}
+
+#chat::-webkit-scrollbar
+{
+	width: 6px;
+	background-color: #F5F5F5;
+}
+
+#chat::-webkit-scrollbar-thumb
+{
+	background-color: #000000;
+}
+
+
+
+
+/* -----------------------------------------
+   Page Name 2
+----------------------------------------- */
+
+
