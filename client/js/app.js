@@ -12,10 +12,10 @@ $(document).ready(function(){
    		// Connected, let's sign-up for to receive messages for this room
    		socket.emit('room', userRoom);
    		$('#chat').append('<p>Entrando a cuarto: ' + userRoom + '</p>');
-   		
+
 	});
 	socket.on('message', function(data) {
-		$('#chat').append('<p>' + data.from + ': ' + data.mensaje + '</p>');
+		$('#chat').append('<p>' + data.from + ': ' + escape(data.mensaje) + '</p>');
 		$('#chat').animate({ scrollTop: $('#chat').height()}, 1000);
 	});
 
@@ -25,7 +25,7 @@ $(document).ready(function(){
 	})
 
 	socket.on('userMessage', function(data) {
-		$('#chat').append('<p>Tu: ' + data.mensaje + '</p>');
+		$('#chat').append('<p>Tu: ' + escape(data.mensaje) + '</p>');
 		$('#chat').animate({ scrollTop: $('#chat').height()}, 1000);
 	});
 	$('#toSend').keyup(function(e){
