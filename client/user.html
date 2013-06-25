@@ -1,0 +1,13 @@
+<script src="node_modules/socket.io/node_modules/socket.io-client/dist/socket.io.js"></script>
+<script>
+  var socket = io.connect('http://localhost:1337');
+  var room = "abc123";
+ 
+	socket.on('connect', function() {
+			// Connected, let's sign-up for to receive messages for this room
+			socket.emit('room', room);
+	});
+	socket.on('message', function(data) {
+			console.log('Incoming message:', data);
+	});
+</script>
