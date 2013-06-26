@@ -6,12 +6,12 @@ $(document).ready(function(){
 		chatSize();
 	})
 	var socket = io.connect('http://psyrax-nodechat.jit.su/');
- 	var userRoom = 'Chatin';
+	//var socket = io.connect('http://localhost:1337');
  	var userNickname;
 	socket.on('connect', function() {
    		// Connected, let's sign-up for to receive messages for this room
    		socket.emit('room', userRoom);
-   		$('#chatContent').append('<h5 class="subheader">Bienvenido a Chatin</h5>');
+   		$('#chatContent').append('<h5 class="subheader">Bienvenido a ' + userRoom + '</h5>');
 
 	});
 	socket.on('message', function(data) {
@@ -40,6 +40,11 @@ $(document).ready(function(){
 			socket.emit('transmit', { 'room': userRoom, 'userMensaje': sendMessage, 'userNick': userNickname });
 		}
 	});
+
+	$('#customChatin').on('click', function(){
+		window.location.href = 'http://oglabs.info/chatin/' + $('#customChatinName').val();
+	});
+
 	function chatSize()
 	{
 		var altura = $(window).height() - 150;

@@ -1,24 +1,18 @@
-var app = require('http').createServer(handler),
-io = require('socket.io').listen(app),
-fs = require('fs'),
+var express = require('express'),
+app = express(),
+server = require('http').createServer(app),
+io = require('socket.io').listen(server),
 sanitizer = require('sanitizer'),
 Moniker = require('moniker'),
 counter = 0;
 
-app.listen(1337);
+server.listen(1337);
 
-function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
-  function (err, data) {
-    if (err) {
-      res.writeHead(500);
-      return res.end('Error loading index.html');
-    }
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
 
-    res.writeHead(200);
-    res.end(data);
-  });
-}
+});
+
 
 io.sockets.on('connection', function (socket) {
 

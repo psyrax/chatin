@@ -6,9 +6,10 @@
   },
   "version": "0.0.2-16",
   "dependencies": {
-    "socket.io": "*",
-    "moniker": "*",
-    "sanitizer": "*"
+    "socket.io": "0.9.16",
+    "moniker": "0.1.2",
+    "sanitizer": "0.0.15",
+    "express": "3.x"
   },
   "engines": {
     "node": "0.8.x"
