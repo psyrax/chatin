@@ -5,6 +5,7 @@ $(document).ready(function(){
 	$(window).resize(function(){
 		chatSize();
 	})
+
 	var socket = io.connect('http://psyrax-nodechat.jit.su/');
 	//var socket = io.connect('http://localhost:1337');
  	var userNickname;
@@ -41,8 +42,15 @@ $(document).ready(function(){
 		}
 	});
 
+
 	$('#customChatin').on('click', function(){
 		window.location.href = 'http://oglabs.info/chatin/' + $('#customChatinName').val();
+	});
+	
+	$('#newNick').on('click', function(e) {
+		e.preventDefault();
+
+		socket.emit('changeNick');
 	});
 
 	function chatSize()

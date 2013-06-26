@@ -8,18 +8,22 @@ counter = 0;
 
 server.listen(1337);
 
+
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/index.html');
 
 });
 
-
 io.sockets.on('connection', function (socket) {
 
   socket.on('room', function(room) {
-        socket.join(room);
-        socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
-        counter ++;
+    socket.join(room);
+    socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
+    counter ++;
+  });
+
+  socket.on('changeNick', function() {
+    socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
   });
 
   socket.on('disconnect', function(){
@@ -27,7 +31,7 @@ io.sockets.on('connection', function (socket) {
     {
        counter --;
     }
-   
+
   });
 
   socket.on('transmit', function(data){
