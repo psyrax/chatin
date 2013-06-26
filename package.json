@@ -4,11 +4,12 @@
   "scripts": {
     "start": "node server.js"
   },
-  "version": "0.0.2",
+  "version": "0.0.2-15",
   "dependencies": {
-  	"socket.io" : "*",
-  	"moniker" : "*"
-  	},
+    "socket.io": "*",
+    "moniker": "*",
+    "sanitizer": "*"
+  },
   "engines": {
     "node": "0.8.x"
   }

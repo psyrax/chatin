@@ -15,8 +15,9 @@ $(document).ready(function(){
 
 	});
 	socket.on('message', function(data) {
-		$('#chat').append('<p>' + data.from + ': ' + escape(data.mensaje) + '</p>');
+		$('#chat').append('<p>' + data.from + ': ' + data.mensaje + '</p>');
 		$('#chat').animate({ scrollTop: $('#chat').height()}, 1000);
+		$('#info').html(' Hay ' + data.total + ' usuarios');
 	});
 
 	socket.on('nickname', function(data){
@@ -25,9 +26,11 @@ $(document).ready(function(){
 	})
 
 	socket.on('userMessage', function(data) {
-		$('#chat').append('<p>Tu: ' + escape(data.mensaje) + '</p>');
+		$('#chat').append('<p>Tu: ' + data.mensaje + '</p>');
 		$('#chat').animate({ scrollTop: $('#chat').height()}, 1000);
+		$('#info').html(' Hay ' + data.total + ' usuarios');
 	});
+
 	$('#toSend').keyup(function(e){
 		if(e.keyCode == 13)
 		{

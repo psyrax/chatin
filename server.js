@@ -1,7 +1,9 @@
 var app = require('http').createServer(handler),
 io = require('socket.io').listen(app),
 fs = require('fs'),
-Moniker = require('moniker');
+sanitizer = require('sanitizer'),
+Moniker = require('moniker'),
+counter = 0;
 
 app.listen(1337);
 
@@ -19,17 +21,26 @@ function handler (req, res) {
 }
 
 io.sockets.on('connection', function (socket) {
+
   socket.on('room', function(room) {
         socket.join(room);
-        socket.emit('nickname', { nickname: Moniker.choose() });
+        socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
+        counter ++;
   });
+
+  socket.on('disconnect', function(){
+    counter --;
+  });
+
   socket.on('transmit', function(data){
     var selroom = data.room;
     var usermensaje = data.userMensaje;
     var userNick = data.userNick;
     socket.in(selroom).broadcast.emit('message' ,
-      { mensaje: usermensaje,
-        from: userNick });
-    socket.in(selroom).emit('userMessage' ,{mensaje: usermensaje});
-  })
+      { mensaje: sanitizer.sanitize(usermensaje),
+        from: sanitizer.sanitize(userNick),
+        total: counter });
+    socket.in(selroom).emit('userMessage' ,{mensaje: sanitizer.sanitize(usermensaje), total: counter});
+  });
+
 });
