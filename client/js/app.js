@@ -5,6 +5,7 @@ $(document).ready(function(){
 	$(window).resize(function(){
 		chatSize();
 	})
+
 	var socket = io.connect('http://psyrax-nodechat.jit.su/');
  	var userRoom = 'Chatin';
  	var userNickname;
@@ -40,6 +41,13 @@ $(document).ready(function(){
 			socket.emit('transmit', { 'room': userRoom, 'userMensaje': sendMessage, 'userNick': userNickname });
 		}
 	});
+
+	$('#newNick').click(function(e) {
+		e.preventDefault();
+
+		socket.emit('changeNick');
+	});
+
 	function chatSize()
 	{
 		var altura = $(window).height() - 150;

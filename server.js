@@ -8,7 +8,7 @@ counter = 0;
 app.listen(1337);
 
 function handler (req, res) {
-  fs.readFile(__dirname + '/index.html',
+  fs.readFile(__dirname + '/client/index.html',
   function (err, data) {
     if (err) {
       res.writeHead(500);
@@ -23,9 +23,13 @@ function handler (req, res) {
 io.sockets.on('connection', function (socket) {
 
   socket.on('room', function(room) {
-        socket.join(room);
-        socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
-        counter ++;
+    socket.join(room);
+    socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
+    counter ++;
+  });
+
+  socket.on('changeNick', function() {
+    socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
   });
 
   socket.on('disconnect', function(){
@@ -33,7 +37,7 @@ io.sockets.on('connection', function (socket) {
     {
        counter --;
     }
-   
+
   });
 
   socket.on('transmit', function(data){
