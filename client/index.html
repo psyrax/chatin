@@ -6,6 +6,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width" />
 	<title>Chatin</title>
+	<link href='http://fonts.googleapis.com/css?family=Fauna+One' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="css/foundation.css" />
 	<link rel="stylesheet" href="css/app.css" />
 	<script src="js/vendor/custom.modernizr.js"></script>
@@ -13,29 +14,36 @@
 </head>
 <body>
 	<div class="row">
-		<div class="large-12 columns" id="chat">
+		<div class="large-8 columns" id="chat">
+			<div id="chatContent"></div>
+			<div id="anclaBaja"></div>
+		</div>
+		<div class="large-4 columns" id="chatinInfo">
+			<p>Chat&iacute;n es un chat an&oacute;nimo y con nombres de usuario al azar. Cada que entras tienes un nuevo nickname y as&iacute; mantenemos el anonimato de todos.</p>
+			<p>Desquitate con otros, haz berrinche o confiesa todos tus pecados.</p>
+			<p>De cualquier manera el equipo de Chat&iacute;n no se hace responsable del contenido publicado en esta plataforma.</p>
 		</div>
 	</div>
 	<hr />
 	<div class="row">
-		<div class="large-12 columns" id="messageBox">
+		<div class="large-8 columns" id="messageBox">
 			<div class="row">
-				<div class="large-2 columns" id="nickEcho">
+				<div class="large-4 columns" id="infoUser">
+					<div id="nickEcho"></div>
+					<span class="success label radius">Ese eres t&uacute;</span>
 				</div>
-				<div class="large-10 columns">
+				<div class="large-8 columns">
 					<input type="text" id="toSend" />
-					<h6 class="subheader">Enter para enviar. Esto es un chat anonimo con nicknames random. Enjoy.</h6>
-					<h6 class="subheader" id="info"></h6>
+					<input type="checkbox" id="autoScrollCheck"  /> Auto scroll
 				</div>
-			</div>	
+			</div>
+		</div>
+		<div class="large-4 columns">
+			<h6 class="subheader">Enter para enviar.</h6>
+			<h6 class="subheader" id="info"></h6>
 		</div>
 	</div>
-	
-	<script>
-	document.write('<script src=' +
-	('__proto__' in {} ? 'js/vendor/zepto' : 'js/vendor/jquery') +
-	'.js><\/script>')
-	</script>
+	<script src="js/vendor/jquery.js"></script>
 	<script src="js/foundation.min.js"></script>
 	<script src="js/socket.io.js"></script>
 	<script src="js/app.js"></script>

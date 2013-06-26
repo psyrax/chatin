@@ -11,23 +11,24 @@ $(document).ready(function(){
 	socket.on('connect', function() {
    		// Connected, let's sign-up for to receive messages for this room
    		socket.emit('room', userRoom);
-   		$('#chat').append('<p>Entrando a cuarto: ' + userRoom + '</p>');
+   		$('#chatContent').append('<h5 class="subheader">Bienvenido a Chatin</h5>');
 
 	});
 	socket.on('message', function(data) {
-		$('#chat').append('<p>' + data.from + ': ' + data.mensaje + '</p>');
-		$('#chat').animate({ scrollTop: $('#chat').height()}, 1000);
+		$('#chatContent').append('<p><span class="otrosDisplay">' + data.from + ':</span> ' + data.mensaje + '</p>');
+		autoScroll();
 		$('#info').html(' Hay ' + data.total + ' usuarios');
 	});
 
 	socket.on('nickname', function(data){
 		userNickname = data.nickname;
-		$('#nickEcho').html('<h6 class="subheader">Tu eres ' + userNickname + ' :</h6>');
+		$('#nickEcho').html('<h6 class="subheader">Hola ' + userNickname + '</h6>');
 	})
 
 	socket.on('userMessage', function(data) {
-		$('#chat').append('<p>Tu: ' + data.mensaje + '</p>');
-		$('#chat').animate({ scrollTop: $('#chat').height()}, 1000);
+		$('.lastCheck').remove();
+		$('#chatContent').append('<p><span class="userDisplay ">T&uacute;:</span> ' + data.mensaje + ' <span class="lastCheck radius secondary label"> - &Uacute;ltimo update -</span></p>');
+		autoScroll();
 		$('#info').html(' Hay ' + data.total + ' usuarios');
 	});
 
@@ -43,5 +44,13 @@ $(document).ready(function(){
 	{
 		var altura = $(window).height() - 150;
 		$('#chat').height(altura);
+	}
+
+	function autoScroll()
+	{
+		if ( $('#autoScrollCheck').is(':checked') )
+		{
+			$('#chat').animate({ scrollTop: $('#anclaBaja').offset().top});
+		}
 	}
 })

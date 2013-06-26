@@ -29,7 +29,11 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('disconnect', function(){
-    counter --;
+    if ( counter > 0)
+    {
+       counter --;
+    }
+   
   });
 
   socket.on('transmit', function(data){
