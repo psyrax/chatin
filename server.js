@@ -44,7 +44,8 @@ io.sockets.on('connection', function (socket) {
     var usermensaje = data.userMensaje;
     var userNick = data.userNick;
     var now = new Date()
-    var dated = dateFormat(now, "h:MM:ss TT");
+    var nowMX = now.setHours( now.getHours() - 5 );
+    var dated = dateFormat(nowMX, "h:MM:ss TT");
 
     socket.in(selroom).broadcast.emit('message' ,{
       'mensaje': sanitizer.sanitize(usermensaje),

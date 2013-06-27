@@ -6,7 +6,6 @@ $(document).ready(function(){
 		chatSize();
 	})
 
-	getReddit();
 
 	var socket = io.connect('http://psyrax-nodechat.jit.su/');
 	//var socket = io.connect('http://localhost:1337');
@@ -64,19 +63,9 @@ $(document).ready(function(){
 	{
 		if ( $('#autoScrollCheck').is(':checked') )
 		{
-			$('#chat').animate({ scrollTop: $('#anclaBaja').offset().top});
+			$('#chat').scrollTop($('#anclaBaja').offset().top);
 		}
 	}
 
-	function getReddit()
-	{
-		if ( reddit )
-		{
-			setInterval(function(){ 
-				socket.emit('getReddit', { 'reddit': subReddit });
-			 }, 10000)
-			
-		}
-	}
 
 })
