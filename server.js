@@ -4,7 +4,9 @@ server = require('http').createServer(app),
 io = require('socket.io').listen(server),
 sanitizer = require('sanitizer'),
 Moniker = require('moniker'),
-counter = 0;
+counter = 0,
+http = require('http'),
+dateFormat = require('dateformat')
 
 server.listen(1337);
 
@@ -34,15 +36,28 @@ io.sockets.on('connection', function (socket) {
 
   });
 
+
+
   socket.on('transmit', function(data){
+
     var selroom = data.room;
     var usermensaje = data.userMensaje;
     var userNick = data.userNick;
-    socket.in(selroom).broadcast.emit('message' ,
-      { mensaje: sanitizer.sanitize(usermensaje),
-        from: sanitizer.sanitize(userNick),
-        total: counter });
-    socket.in(selroom).emit('userMessage' ,{mensaje: sanitizer.sanitize(usermensaje), total: counter});
+    var now = new Date()
+    var dated = dateFormat(now, "h:MM:ss TT");
+
+    socket.in(selroom).broadcast.emit('message' ,{
+      'mensaje': sanitizer.sanitize(usermensaje),
+      'from': sanitizer.sanitize(userNick),
+      'date': dated,
+      'total': counter
+    });
+
+    socket.in(selroom).emit('userMessage', {
+      'mensaje': sanitizer.sanitize(usermensaje),
+      'date': dated,
+      'total': counter
+    });
   });
 
 });

@@ -26,6 +26,11 @@
 	font-size: 0.9em;
 	padding-left: 1em;
 }
+#makerInfo
+{
+	font-family: 'Press Start 2P', cursive;
+}
+
 #chat p:nth-of-type(odd)
 {
 	

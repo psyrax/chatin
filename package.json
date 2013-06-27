@@ -4,12 +4,14 @@
   "scripts": {
     "start": "node server.js"
   },
-  "version": "0.0.2-16",
+  "version": "0.0.2-17",
   "dependencies": {
-    "socket.io": "0.9.16",
-    "moniker": "0.1.2",
+    "socket.io": "0.9.x",
+    "moniker": "0.1.x",
     "sanitizer": "0.0.15",
-    "express": "3.x"
+    "express": "3.x",
+    "dateformat" : "1.0.x",
+    "redwrap" : "0.0.4"
   },
   "engines": {
     "node": "0.8.x"
