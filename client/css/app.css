@@ -61,9 +61,43 @@
 #actionLand
 {
 	background-color: #DDD;
-	padding-top: 1em;
-	padding-bottom: 1em;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 	border-top:thin solid #000;
+	margin-left: -1em;
+	width: 100%;
+}
+#mainContent
+{
+	border: thin solid #DDD;
+}
+
+#chatBox
+{
+	padding-right: 2em;
+}
+
+#mainRow
+{
+	margin-top: 1em;
+}
+
+
+.color0{color: #5B0044;}
+.color1{color: #04756F;}
+.color2{color: #FF8C00;}
+.color3{color: #CC6A14;}
+.color4{color: #99683D;}
+.color5{color: #093BB2;}
+.color6{color: #159E31;}
+.color7{color: #01B0F0;}
+.color8{color: #FF358B;}
+.color9{color: #D64300;}
+.color10{color: #932E3E;}
+
+.footer
+{
+	margin-top: 2em;
 }
 /* -----------------------------------------
    Page Name 1

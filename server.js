@@ -6,7 +6,9 @@ sanitizer = require('sanitizer'),
 Moniker = require('moniker'),
 counter = 0,
 http = require('http'),
-dateFormat = require('dateformat')
+dateFormat = require('dateformat');
+var lastMessages = [];
+
 
 server.listen(1337);
 
@@ -20,12 +22,20 @@ io.sockets.on('connection', function (socket) {
 
   socket.on('room', function(room) {
     socket.join(room);
-    socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
+
     counter ++;
+
+    socket.emit('nickname', makeName() );
+
+    socket.emit('backlog', {
+      'backLog' : lastMessages,
+      'total' : counter
+    });
+    
   });
 
   socket.on('changeNick', function() {
-    socket.emit('nickname', { nickname: sanitizer.sanitize(Moniker.choose()) });
+    socket.emit('nickname', makeName() );
   });
 
   socket.on('disconnect', function(){
@@ -41,24 +51,39 @@ io.sockets.on('connection', function (socket) {
   socket.on('transmit', function(data){
 
     var selroom = data.room;
-    var usermensaje = data.userMensaje;
-    var userNick = data.userNick;
+    var usermensaje = sanitizer.sanitize(data.userMensaje);
+    var userNick = sanitizer.sanitize(data.userNick);
+    var userColor = sanitizer.sanitize(data.userColor);
     var now = new Date()
     var nowMX = now.setHours( now.getHours() - 5 );
     var dated = dateFormat(nowMX, "h:MM:ss TT");
 
-    socket.in(selroom).broadcast.emit('message' ,{
-      'mensaje': sanitizer.sanitize(usermensaje),
-      'from': sanitizer.sanitize(userNick),
+    var mensaje = {
+      'mensaje': usermensaje,
+      'from': {'username': userNick, 'color': userColor},
       'date': dated,
       'total': counter
-    });
+    };
 
-    socket.in(selroom).emit('userMessage', {
-      'mensaje': sanitizer.sanitize(usermensaje),
-      'date': dated,
-      'total': counter
-    });
+    if ( lastMessages.length > 10 )
+    {
+      lastMessages.shift();
+    }
+
+    lastMessages.push( mensaje );
+
+    socket.in(selroom).broadcast.emit('message' , mensaje);
+
+    socket.in(selroom).emit('userMessage', mensaje);
   });
+
+  function makeName()
+  {
+    var nickData = { 
+      'nickname': sanitizer.sanitize(Moniker.choose()),
+      'color' : Math.floor(Math.random()*11)
+    }
+    return nickData;
+  }
 
 });
