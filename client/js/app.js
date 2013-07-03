@@ -1,33 +1,72 @@
-var userRoom;
 $(document).ready(function(){
 	$(document).foundation();
-	(function(){
+	window.App = {
+	    Models: {},
+	    Collections: {},
+	    Views: {},
+	    Router: {}
+	};
+	
 
-		window.App = {
-		    Models: {},
-		    Collections: {},
-		    Views: {},
-		    Router: {}
-		};
-		App.Router = Backbone.Router.extend({
-		    routes: {
-		        '': 'index',
-		        'c/:id': 'c'
-		    },
+	var UserModel = Backbone.Model.extend({
+		defaults: {
+			'username' : 'username',
+			'color' : '0'
+		},
+		initialize:function () {
+	       this.on('change', function(){
+		        $('#nickEcho').html('<h6 class="subheader">Eres ' + this.get('username') + '</h6>');
+		    });
+	    }
+	});
 
-		    index: function(){
-		       userRoom = 'Chatin';
-		    },
 
-		    c: function(id){
-		        userRoom = id;
-		    }
-		});
+	var ChatRoom = Backbone.Model.extend({
+		defaults: {
+			'chatRoom': 'Chatin',
+			'totalUsers': '0',
+			'messageHistory': ''
+		},
+		initialize: function(){
+			this.on('change:totalUsers', function(){
+				$('#info').html(' Hay ' + this.get('totalUsers') + ' usuarios');
+			});
+			this.on('change:chatRoom', function(){
+				$('#chatContent').html('<h5 class="subheader">Bienvenido a ' + this.get('chatRoom') + '</h5>');
+				$('#chatName').html(this.get('chatRoom'));
+			});
+		}
+	});
 
-		new App.Router;
-		Backbone.history.start();
+	var room = new ChatRoom();
 
-	})();
+	var user = new UserModel();
+
+
+
+	App.Router = Backbone.Router.extend({
+	    routes: {
+	        '': 'index',
+	        'c/:id': 'c'
+	    },
+
+	    index: function(){
+	       
+	    },
+
+	    c: function(id){
+	        room.set({
+	        	'chatRoom': id
+	        })
+	    }
+	});
+
+	new App.Router;
+	Backbone.history.start();
+
+
+
+
 	chatSize();
 	$(window).resize(function(){
 		chatSize();
@@ -36,37 +75,42 @@ $(document).ready(function(){
 
 	var socket = io.connect('http://psyrax-nodechat.jit.su/');
 	//var socket = io.connect('http://localhost:1337');
- 	var userNickname, userColor;
+
 
 	socket.on('connect', function() {
-   		socket.emit('room', userRoom);
-   		$('#chatContent').append('<h5 class="subheader">Bienvenido a ' + userRoom + '</h5>');
-
+   		socket.emit('room', room.get('chatRoom'));
 	});
 	socket.on('message', function(data) {
 		messagePrint(data);
 		autoScroll();
-		$('#info').html(' Hay ' + data.total + ' usuarios');
+		room.set({
+			'totalUsers': data.total
+		})
 	});
 
 	socket.on('nickname', function(data){
-		userNickname = data.nickname;
-		userColor = data.color;
-		$('#nickEcho').html('<h6 class="subheader">Eres ' + userNickname + '</h6>');
+		user.set({
+			'username' : data.nickname,
+			'color' : data.color
+		});
 	})
 
 	socket.on('userMessage', function(data) {
 		$('.lastCheck').remove();
 		$('#chatContent').append('<p><span class="userDisplay ">T&uacute;:</span> ' + data.mensaje + ' <span class="lastCheck radius secondary label"> - &Uacute;ltimo update <small>' + data.date + '</small> -</span></p>');
+		room.set({
+			'totalUsers': data.total
+		});
 		autoScroll();
-		$('#info').html(' Hay ' + data.total + ' usuarios');
 	});
 
 	socket.on('backlog', function(data){
 		$.each(data.backLog, function(index, value){
 			messagePrint(value);
 		});
-		$('#info').html(' Hay ' + data.total + ' usuarios');
+		room.set({
+			'totalUsers': data.total
+		});
 	});
 
 	$('#toSend').keyup(function(e){
@@ -74,10 +118,10 @@ $(document).ready(function(){
 		{
   			var sendMessage = $('#toSend').val();
 			$('#toSend').val('');
-			socket.emit('transmit', { 'room': userRoom, 
+			socket.emit('transmit', { 'room': room.get('chatRoom'), 
 				'userMensaje': sendMessage, 
-				'userNick': userNickname,
-				'userColor': userColor
+				'userNick': user.get('username'),
+				'userColor': user.get('color')
 			});
 		}
 	});
