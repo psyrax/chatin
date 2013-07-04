@@ -60,7 +60,7 @@ io.sockets.on('connection', function (socket) {
 
     var mensaje = {
       'mensaje': usermensaje,
-      'from': {'username': userNick, 'color': userColor},
+      'from': {'username': userNick, 'color': sanitizer.sanitize(userColor) },
       'date': dated,
       'total': counter
     };

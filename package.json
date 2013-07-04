@@ -4,7 +4,7 @@
   "scripts": {
     "start": "node server.js"
   },
-  "version": "0.0.2-27",
+  "version": "0.0.2-29",
   "dependencies": {
     "socket.io": "0.9.x",
     "moniker": "0.1.x",

@@ -43,7 +43,7 @@
 						<div class="row">
 							<div class="large-4 columns" id="infoUser">
 								<div id="nickEcho"></div>
-								<a href="#newNick" id="newNick" class="tiny button radius">Cambiar nick</a>
+								<div id="newNick" class="tiny button radius">Cambiar nick</div>
 							</div>
 							<div class="large-8 columns" id="chatBox">
 								<input type="text" id="toSend" placeholder="Enter para enviar" />
@@ -63,17 +63,19 @@
 			     	<h5 class="subheader">Estas en <span id="chatName"></span></h5>
 			     	<h6 class="subheader" id="info"></h6>
 			     	<hr />
+			     	<div id="customChatInfo">
 					<p>Crea tu Chat&iacute;n privado</p>
-					<div class="row collapse">
-						<div class="large-2 columns">
-							<span class="prefix">chatin/</span>
+						<div class="row collapse">
+							<div class="large-2 columns">
+								<span class="prefix">chatin/</span>
+							</div>
+							<div class="large-8 columns">
+								<input type="text" placeholder="Ponle un nombre" id="customChatinName">
+							</div>
+							<div class="small-2 columns">
+			          			<div class="button prefix" id="customChatin">crear</div>
+			        		</div>
 						</div>
-						<div class="large-8 columns">
-							<input type="text" placeholder="Ponle un nombre" id="customChatinName">
-						</div>
-						<div class="small-2 columns">
-		          			<div class="button prefix" id="customChatin">crear</div>
-		        		</div>
 					</div>
 			    </div>
 			  </section>
@@ -96,6 +98,7 @@
 		</div>
 	</div>
 	<script src="js/vendor/jquery.js"></script>
+	<script src="js/jquery.scrollto.js"></script>
 	<script src="js/underscore.js"></script>
 	<script src="js/json2.js"></script>
 	<script src="js/backbone.js"></script>

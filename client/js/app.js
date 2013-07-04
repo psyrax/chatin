@@ -1,5 +1,10 @@
 $(document).ready(function(){
 	$(document).foundation();
+
+	$(window).resize(function(){
+		chatSize();
+	});
+
 	window.App = {
 	    Models: {},
 	    Collections: {},
@@ -10,8 +15,7 @@ $(document).ready(function(){
 
 	var UserModel = Backbone.Model.extend({
 		defaults: {
-			'username' : 'username',
-			'color' : '0'
+			'username' : 'username'
 		},
 		initialize:function () {
 	       this.on('change', function(){
@@ -30,10 +34,14 @@ $(document).ready(function(){
 		initialize: function(){
 			this.on('change:totalUsers', function(){
 				$('#info').html(' Hay ' + this.get('totalUsers') + ' usuarios');
+
 			});
 			this.on('change:chatRoom', function(){
-				$('#chatContent').html('<h5 class="subheader">Bienvenido a ' + this.get('chatRoom') + '</h5>');
-				$('#chatName').html(this.get('chatRoom'));
+				putChatInfo();
+				$('#customChatInfo').html('<p>Comparte esta sala usando la siguiente direcci&oacute;n: <a href="/#c/' + this.get('chatRoom') + '">http://chatin.mx/#c/' + this.get('chatRoom') + '</a></p>');
+			});
+			this.on('change:messageHistory', function(){
+
 			});
 		}
 	});
@@ -55,9 +63,14 @@ $(document).ready(function(){
 	    },
 
 	    c: function(id){
-	        room.set({
-	        	'chatRoom': id
-	        })
+
+	    	if ( ! isBlank(id) )
+	    	{
+	    		room.set({
+	        		'chatRoom': id
+	        	});
+	    	}
+	        
 	    }
 	});
 
@@ -68,24 +81,22 @@ $(document).ready(function(){
 
 
 	chatSize();
-	$(window).resize(function(){
-		chatSize();
-	})
-
 
 	var socket = io.connect('http://psyrax-nodechat.jit.su/');
-	//var socket = io.connect('http://localhost:1337');
-
 
 	socket.on('connect', function() {
-   		socket.emit('room', room.get('chatRoom'));
+		socket.emit('room', room.get('chatRoom'));
+		putChatInfo();
 	});
+
 	socket.on('message', function(data) {
 		messagePrint(data);
-		autoScroll();
+
 		room.set({
 			'totalUsers': data.total
-		})
+		});
+
+		autoScroll();
 	});
 
 	socket.on('nickname', function(data){
@@ -105,34 +116,55 @@ $(document).ready(function(){
 	});
 
 	socket.on('backlog', function(data){
-		$.each(data.backLog, function(index, value){
-			messagePrint(value);
-		});
+
+		if( room.get('chatRoom') == "Chatin" )
+		{
+			$.each(data.backLog, function(index, value){
+				messagePrint(value);
+			});
+		}
+		
 		room.set({
 			'totalUsers': data.total
 		});
+
 	});
 
 	$('#toSend').keyup(function(e){
 		if(e.keyCode == 13)
 		{
   			var sendMessage = $('#toSend').val();
+
 			$('#toSend').val('');
-			socket.emit('transmit', { 'room': room.get('chatRoom'), 
-				'userMensaje': sendMessage, 
-				'userNick': user.get('username'),
-				'userColor': user.get('color')
-			});
+
+			if ( ! isBlank(sendMessage) )
+			{
+				socket.emit('transmit', { 'room': room.get('chatRoom'), 
+					'userMensaje': sendMessage, 
+					'userNick': user.get('username'),
+					'userColor': user.get('color')
+				});	
+			};
+			
 		}
 	});
 
 
 	$('#customChatin').on('click', function(){
-		window.open('http://oglabs.info/chatin/#c/' + $('#customChatinName').val());
+
+		var nextRoom = $('#customChatinName').val();
+
+		if ( ! isBlank(nextRoom) )
+		{
+			window.location.href  = '#c/' + nextRoom;
+			room.set({
+				'chatRoom' : nextRoom
+			})
+		}
+		
 	});
 
 	$('#newNick').on('click', function(e) {
-		e.preventDefault();
 		socket.emit('changeNick');
 	});
 
@@ -146,7 +178,8 @@ $(document).ready(function(){
 	{
 		if ( $('#autoScrollCheck').is(':checked') )
 		{
-			$('#chat').scrollTop($('#anclaBaja').offset().top);
+			var pos = $('#anclaBaja').position();
+			$('#chat').scrollTo('100%');
 		}
 	}
 	function messagePrint(data)
@@ -154,4 +187,13 @@ $(document).ready(function(){
 		$('#chatContent').append('<p><span class="otrosDisplay color'+ data.from.color +'">' + data.from.username + ':</span> ' + data.mensaje + '<small> - ' + data.date + '</small></p>');
 	}
 
+	function isBlank(str) {
+    	return (!str || /^\s*$/.test(str));
+	}
+
+	function putChatInfo()
+	{
+		$('#chatContent').html('<h5 class="subheader">Bienvenido a ' + room.get('chatRoom') + '</h5>');
+		$('#chatName').html(room.get('chatRoom'));
+	}
 })
