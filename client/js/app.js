@@ -11,7 +11,7 @@ $(document).ready(function(){
 	    Views: {},
 	    Router: {}
 	};
-	
+
 
 	var UserModel = Backbone.Model.extend({
 		defaults: {
@@ -59,7 +59,7 @@ $(document).ready(function(){
 	    },
 
 	    index: function(){
-	       
+
 	    },
 
 	    c: function(id){
@@ -70,7 +70,7 @@ $(document).ready(function(){
 	        		'chatRoom': id
 	        	});
 	    	}
-	        
+
 	    }
 	});
 
@@ -82,7 +82,8 @@ $(document).ready(function(){
 
 	chatSize();
 
-	var socket = io.connect('http://psyrax-nodechat.jit.su/');
+	//var socket = io.connect('http://psyrax-nodechat.jit.su/');
+	var socket = io.connect('http://localhost:1337');
 
 	socket.on('connect', function() {
 		socket.emit('room', room.get('chatRoom'));
@@ -123,7 +124,7 @@ $(document).ready(function(){
 				messagePrint(value);
 			});
 		}
-		
+
 		room.set({
 			'totalUsers': data.total
 		});
@@ -139,13 +140,13 @@ $(document).ready(function(){
 
 			if ( ! isBlank(sendMessage) )
 			{
-				socket.emit('transmit', { 'room': room.get('chatRoom'), 
-					'userMensaje': sendMessage, 
+				socket.emit('transmit', { 'room': room.get('chatRoom'),
+					'userMensaje': sendMessage,
 					'userNick': user.get('username'),
 					'userColor': user.get('color')
-				});	
+				});
 			};
-			
+
 		}
 	});
 
@@ -161,7 +162,7 @@ $(document).ready(function(){
 				'chatRoom' : nextRoom
 			})
 		}
-		
+
 	});
 
 	$('#newNick').on('click', function(e) {
@@ -171,15 +172,14 @@ $(document).ready(function(){
 	function chatSize()
 	{
 		var altura = $(window).height()- ( $('#actionLand').height() + 50 );
-		$('#chat').height(altura);
+		$('#chat, #chatContent').height(altura);
 		$('#actionLand').width($('#mainContent').width() + 31);
 	}
 	function autoScroll()
 	{
 		if ( $('#autoScrollCheck').is(':checked') )
 		{
-			var pos = $('#chatContent').height();
-			$('#chat').scrollTop(pos);
+			$('#chatContent').prop('scrollTop', $('#chatContent').prop('scrollHeight'));
 		}
 	}
 	function messagePrint(data)

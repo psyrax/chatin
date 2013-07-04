@@ -1,6 +1,6 @@
 /* Artfully masterminded by ZURB  */
 
-/* -------------------------------------------------- 
+/* --------------------------------------------------
    Table of Contents
 -----------------------------------------------------
 :: Shared Styles
@@ -15,8 +15,6 @@
 
 #chat
 {
-
-	overflow: auto;
 }
 #chat p
 {
@@ -33,7 +31,7 @@
 
 #chat p:nth-of-type(odd)
 {
-	
+
 }
 #chatinInfo
 {
@@ -80,6 +78,10 @@
 #mainRow
 {
 	margin-top: 1em;
+}
+
+#chatContent {
+	overflow: auto;
 }
 
 
