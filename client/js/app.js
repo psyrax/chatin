@@ -178,8 +178,8 @@ $(document).ready(function(){
 	{
 		if ( $('#autoScrollCheck').is(':checked') )
 		{
-			var pos = $('#anclaBaja').position();
-			$('#chat').scrollTo('100%');
+			var pos = $('#chatContent').height();
+			$('#chat').scrollTop(pos);
 		}
 	}
 	function messagePrint(data)
