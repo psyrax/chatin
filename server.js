@@ -34,6 +34,11 @@ io.sockets.on('connection', function (socket) {
     
   });
 
+  socket.on('changeRoom', function(data){
+    socket.leave(room);
+    socket.join(data.nextRoom);
+  });
+
   socket.on('changeNick', function() {
     socket.emit('nickname', makeName() );
   });

@@ -82,8 +82,8 @@ $(document).ready(function(){
 
 	chatSize();
 
-	//var socket = io.connect('http://psyrax-nodechat.jit.su/');
-	var socket = io.connect('http://localhost:1337');
+	var socket = io.connect('http://psyrax-nodechat.jit.su/');
+	//var socket = io.connect('http://localhost:1337');
 
 	socket.on('connect', function() {
 		socket.emit('room', room.get('chatRoom'));
@@ -158,9 +158,12 @@ $(document).ready(function(){
 		if ( ! isBlank(nextRoom) )
 		{
 			window.location.href  = '#c/' + nextRoom;
+			socket.emit('changeRoom',{
+				'roomName': nextRoom
+			});
 			room.set({
 				'chatRoom' : nextRoom
-			})
+			});
 		}
 
 	});
